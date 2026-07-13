@@ -1,26 +1,22 @@
-# 🌸 Elderly Mood Companion
+# Elderly Mood Companion ❤️
 
-A simple, friendly Python program designed as a **mood companion** for elderly people.
+A simple and caring daily companion for elderly people.  
+It asks about mood and 9 healthy habits, then shows a beautiful **Apple-style rings** diagram.
 
-It gently asks how they are feeling, gives caring responses, suggests easy daily activities, and shares light jokes to brighten their day.
+## Features
+- Friendly mood check
+- 9 important daily habit questions
+- Beautiful visual rings (like Apple Fitness)
+- Saves result as `daily_rings.png`
 
----
+## Example Output
 
-## ✨ Features
-- Simple mood check-in
-- Warm and caring replies
-- Easy activity suggestions
-- Light-hearted jokes
-- No complicated setup — works with basic Python
+![Daily Activity Rings](daily_rings.png)
 
----
+## How to Run
 
-## 🚀 How to Run
-
-1. Make sure **Python** is installed on your computer.
-2. Download or clone this repository.
-3. Open terminal / command prompt inside the project folder.
-4. Run this command:
-
-```bash
-python main.py
+1. Install Python (if not installed)
+2. Open terminal/command prompt **inside this folder**
+3. Install required package:
+   ```bash
+   pip install matplotlib
