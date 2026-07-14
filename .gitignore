@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Images (optional - we want to keep daily_rings.png)
+# *.png
+
+# VS Code
+.vscode/
