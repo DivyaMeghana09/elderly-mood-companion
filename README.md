@@ -10,8 +10,14 @@ It asks about mood and 9 healthy habits, then shows a beautiful wellness rings v
 ## ✨ Features
 - Friendly mood conversation
 - 9 important daily habit questions
-- Beautiful donut-style rings diagram
+- Beautiful wellness rings diagram
 - Saves result automatically as `daily_rings.png`
+- Available as desktop and web app
+
+## 🌐 Live Demo
+
+**[Try Live Web Version →](https://elderly-mood-companion.streamlit.app/)**  
+*(No installation needed - works in any browser)*
 
 ## 📸 Screenshots
 
@@ -25,21 +31,21 @@ It asks about mood and 9 healthy habits, then shows a beautiful wellness rings v
 
 ## 🚀 How to Run
 
-1. Install Python (if not installed) 
-2. Open terminal/command prompt **inside the project folder**
-3. Install the required package:
-   ```bash
-   pip install matplotlib 
-   ```
-4. Run the app:
-   ```bash
-   python main.py
-   ```
+### Desktop Version
+```bash
+python main.py
+```
+
+### Web Version (Recommended)
+```bash
+streamlit run app.py
+```
 
 **📁 Project Structure**
 ```bash
 elderly-mood-companion/
-├── main.py                    # Main program
+├── main.py                    # Desktop version
+├── app.py                     # Web version (Streamlit)
 ├── README.md                  # Project documentation
 ├── requirements.txt           # Required packages
 ├── daily_rings.png            # Example output image
@@ -48,7 +54,10 @@ elderly-mood-companion/
 └── .gitignore                 # Files to ignore 
 ```
 
-**📄 License**
+## 📄 License
 This project is licensed under the MIT License - see the LICENSE file.
+
+## 📊 Results
+Users get clear visual feedback through progress rings — green rings show completed healthy habits, encouraging consistent daily routines.
 
 Made with love for seniors 💕
