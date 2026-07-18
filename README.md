@@ -12,6 +12,7 @@ It asks about mood and 9 healthy habits, then shows a beautiful wellness rings v
 - 9 important daily habit questions
 - Beautiful wellness rings diagram
 - Saves result automatically as `daily_rings.png`
+- Helpful tips when answer is "No"
 - Available as desktop and web app
 
 ## 🌐 Live Demo
