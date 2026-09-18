@@ -7,6 +7,38 @@
 A simple and caring daily companion for elderly people.  
 It asks about mood and 9 healthy habits, then shows a beautiful wellness rings visualization.
 
+## CareFlow AI — NVIDIA Nemotron
+
+CareFlow AI extends the Elderly Mood Companion with NVIDIA Nemotron.
+
+A caregiver can enter a simple daily observation, such as:
+
+"Grandma did not sleep well and skipped breakfast."
+
+Nemotron analyzes the message and returns:
+
+- Observation
+- Mood
+- Follow-up
+- Caregiver Action
+
+### AI Workflow
+
+Caregiver observation
+        ↓
+NVIDIA Nemotron
+        ↓
+Observation + Mood
+        ↓
+Follow-up + Caregiver Action
+
+### Milestone 1
+
+- [x] NVIDIA Nemotron integrated
+- [x] Caregiver message analysis
+- [x] Structured AI output
+- [x] Tested with multiple scenarios
+
 ## ✨ Features
 - Friendly mood conversation
 - 9 important daily habit questions
