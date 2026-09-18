@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.env
 
 # Images (optional - we want to keep daily_rings.png)
 # *.png

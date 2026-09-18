@@ -1,11 +1,92 @@
+import os
+import json
+from pathlib import Path
+
 import streamlit as st
 import matplotlib.pyplot as plt
+from dotenv import load_dotenv
+from openai import OpenAI
 from matplotlib.patches import Circle
+env_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path=env_path)
+
+api_key = os.getenv("NVIDIA_API_KEY")
+
+if not api_key:
+    st.error("NVIDIA_API_KEY not found. Check your .env file.")
+    st.stop()
+
+client = OpenAI(
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key=api_key
+)
+
+def analyze_caregiver_message(message):
+    response = client.chat.completions.create(
+        model="nvidia/nemotron-3-super-120b-a12b",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are CareFlow AI, an elderly-care assistant. "
+                    "Do not diagnose medical conditions. "
+                    "Return only valid JSON with exactly these keys: "
+                    "observation, mood, follow_up, action."
+                )
+            },
+            {
+                "role": "user",
+                "content": f'Analyze this caregiver message: "{message}"'
+            }
+        ],
+        temperature=0,
+        max_tokens=500
+    )
+
+    text = response.choices[0].message.content
+    return json.loads(text)
 
 st.set_page_config(page_title="Elderly Mood Companion", page_icon="❤️", layout="centered")
 
 st.title("🌸 Elderly Mood Companion 🌸")
 st.markdown("Hello dear! Let's talk about your day together ❤️")
+
+st.divider()
+
+st.subheader("🤖 CareFlow AI — NVIDIA Nemotron")
+
+caregiver_message = st.text_area(
+    "Tell me what happened today:",
+    placeholder="Example: Grandma did not sleep well and skipped breakfast."
+)
+
+if st.button("Analyze with AI"):
+    if caregiver_message.strip():
+
+        try:
+            result = analyze_caregiver_message(caregiver_message)
+
+            st.success("AI analysis completed")
+
+            st.write("### 👀 Observation")
+            st.write(result["observation"])
+
+            st.write("### 🙂 Mood")
+            st.write(result["mood"])
+
+            st.write("### ❓ Follow-up")
+            st.write(result["follow_up"])
+
+            st.write("### ✅ Caregiver Action")
+            st.write(result["action"])
+
+        except Exception as e:
+            st.error(f"AI error: {e}")
+
+    else:
+        st.warning("Please enter a caregiver message.")
+
+st.divider()
 
 # Mood Check
 mood = st.text_input("How are you feeling today? (happy, sad, tired, okay, lonely)", key="mood")
