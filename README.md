@@ -1,26 +1,19 @@
-# Elderly Mood Companion ❤️
+# Elderly Mood Companion
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge&logo=python&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+## CareFlow AI
 
-A simple and caring daily companion for elderly people.  
-It asks about mood and 9 healthy habits, then shows a beautiful wellness rings visualization.
+Elderly Mood Companion is being upgraded into CareFlow AI,
+an AI-powered elderly-care workflow assistant.
 
-## CareFlow AI — NVIDIA Nemotron
+### What CareFlow AI adds
 
-CareFlow AI extends the Elderly Mood Companion with NVIDIA Nemotron.
-
-A caregiver can enter a simple daily observation, such as:
-
-"Grandma did not sleep well and skipped breakfast."
-
-Nemotron analyzes the message and returns:
-
-- Observation
-- Mood
-- Follow-up
-- Caregiver Action
+- NVIDIA Nemotron LLM
+- Caregiver observation analysis
+- Mood identification
+- Follow-up suggestions
+- Caregiver actions
+- Memory of previous observations
+- Agent decision-making
 
 ### AI Workflow
 
@@ -28,16 +21,21 @@ Caregiver observation
         ↓
 NVIDIA Nemotron
         ↓
-Observation + Mood
+Agent decision
         ↓
-Follow-up + Caregiver Action
+Memory / Analysis
+        ↓
+CareFlow response
 
 ### Milestone 1
+- [x] NVIDIA Nemotron integration
+- [x] Structured AI analysis
 
-- [x] NVIDIA Nemotron integrated
-- [x] Caregiver message analysis
-- [x] Structured AI output
-- [x] Tested with multiple scenarios
+### Milestone 2
+- [x] Memory storage
+- [x] Memory retrieval
+- [x] Agent decision-making
+- [x] Tool execution
 
 ## ✨ Features
 - Friendly mood conversation
