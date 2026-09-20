@@ -37,6 +37,24 @@ CareFlow response
 - [x] Agent decision-making
 - [x] Tool execution
 
+## Milestone 3 — External Tools + Agent Routing
+
+- [x] Integrated Tavily web search
+- [x] Agent can choose when web search is needed
+- [x] Agent can save caregiver observations
+- [x] Agent can retrieve previous observations
+- [x] Agent can use external web information
+- [x] Tested memory and web-search workflows
+
+### Agent Tools
+
+CareFlow AI can choose between:
+
+- `save_memory` — store a new caregiver observation
+- `read_memory` — retrieve previous observations and patterns
+- `search_web` — retrieve external information using Tavily
+- `analyze_only` — analyze without using a tool
+
 ## ✨ Features
 - Friendly mood conversation
 - 9 important daily habit questions
