@@ -8,6 +8,13 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from matplotlib.patches import Circle
 from memory import save_memory, get_memories
+from tavily import TavilyClient
+
+st.set_page_config(
+    page_title="Elderly Mood Companion",
+    page_icon="❤️",
+    layout="centered"
+)
 
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
@@ -22,22 +29,65 @@ client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=api_key
 )
+
+tavily_client = TavilyClient(
+    api_key=os.getenv("TAVILY_API_KEY")
+)
+
 def decide_agent_action(message):
+    message_lower = message.lower().strip()
+
+    # Questions about history/patterns → read memory
+    if "?" in message and any(word in message.lower() for word in [
+        "pattern", "history", "recent", "previous", "changed", "change"
+    ]):
+
+        return "read_memory"
+
+    # Questions asking for information → web search
+    if "?" in message:
+        return "search_web"
+
+    # Normal caregiver statements → save memory
+    return "save_memory"
+
+    # Clear information requests should use web search
+    web_triggers = [
+        "what are some",
+        "what are the",
+        "how can",
+        "how do",
+        "suggest",
+        "suggestions",
+        "ideas for",
+        "activities",
+        "recommend",
+        "recommendations",
+        "information about"
+    ]
+
+    if "?" in message or any(trigger in message_lower for trigger in web_triggers):
+        return "search_web"
+
+    # Otherwise let Nemotron decide
     response = client.chat.completions.create(
         model="nvidia/nemotron-3-super-120b-a12b",
         messages=[
             {
                 "role": "system",
                 "content": (
-                    "You are the decision-making brain of CareFlow AI. "
-                    "Choose exactly one action for the caregiver message.\n\n"
-                    "Available actions:\n"
-                    "save_memory = a new observation about the elderly person "
-                    "that should be remembered.\n"
-                    "read_memory = the message refers to history, repetition, "
-                    "patterns, previous days, or asks what changed over time.\n"
-                    "analyze_only = no memory tool is needed.\n\n"
-                    "Return only valid JSON with exactly one key: action."
+                    "You are the decision-making brain of CareFlow AI.\n\n"
+                    "Choose exactly ONE action.\n\n"
+                    "save_memory = save a new caregiver observation.\n"
+                    "read_memory = retrieve previous observations or patterns.\n"
+                    "search_web = find external information or suggestions.\n"
+                    "analyze_only = simply analyze the current observation.\n\n"
+                    "Return ONLY one exact word:\n"
+                    "save_memory\n"
+                    "read_memory\n"
+                    "search_web\n"
+                    "analyze_only\n"
+                    "Do not explain."
                 )
             },
             {
@@ -46,15 +96,33 @@ def decide_agent_action(message):
             }
         ],
         temperature=0,
-        max_tokens=100
+        max_tokens=20
     )
 
-    text = response.choices[0].message.content
-    decision = json.loads(text)
+    action = response.choices[0].message.content.strip()
 
-    return decision["action"]
+    allowed_actions = {
+        "save_memory",
+        "read_memory",
+        "search_web",
+        "analyze_only"
+    }
 
-def analyze_caregiver_message(message, memory_context=""):
+    if action not in allowed_actions:
+        return "analyze_only"
+
+    return action
+
+def search_web(query):
+    response = tavily_client.search(
+        query,
+        search_depth="basic",
+        max_results=3
+    )
+
+    return response["results"]
+
+def analyze_caregiver_message(message, context=""):
     response = client.chat.completions.create(
         model="nvidia/nemotron-3-super-120b-a12b",
         messages=[
@@ -63,8 +131,11 @@ def analyze_caregiver_message(message, memory_context=""):
                 "content": (
                     "You are CareFlow AI, an elderly-care assistant. "
                     "Do not diagnose medical conditions. "
-                    "Use previous observations when they are provided. "
-                    "Return only valid JSON with exactly these keys: "
+                    "Use the additional context when relevant. "
+                    "Return ONLY valid JSON. "
+                    "Do not use markdown. "
+                    "Do not include extra text. "
+                    "The JSON must contain exactly these four keys: "
                     "observation, mood, follow_up, action."
                 )
             },
@@ -72,7 +143,7 @@ def analyze_caregiver_message(message, memory_context=""):
                 "role": "user",
                 "content": (
                     f"Current caregiver message:\n{message}\n\n"
-                    f"Previous observations:\n{memory_context}"
+                    f"Additional context:\n{context[:6000]}"
                 )
             }
         ],
@@ -80,11 +151,14 @@ def analyze_caregiver_message(message, memory_context=""):
         max_tokens=500
     )
 
-    text = response.choices[0].message.content
+    text = response.choices[0].message.content.strip()
+
+    # Remove markdown code fences if the model adds them
+    if text.startswith("```"):
+        text = text.replace("```json", "").replace("```", "").strip()
 
     return json.loads(text)
 
-st.set_page_config(page_title="Elderly Mood Companion", page_icon="❤️", layout="centered")
 
 st.title("🌸 Elderly Mood Companion 🌸")
 st.markdown("Hello dear! Let's talk about your day together ❤️")
@@ -109,15 +183,23 @@ if st.button("Analyze with AI"):
 
             # Step 2: Python executes the chosen tool
             if agent_action == "save_memory":
-                save_memory(caregiver_message)
+               save_memory(caregiver_message)
 
             elif agent_action == "read_memory":
-                memories = get_memories()
+               memories = get_memories()
 
-                memory_context = "\n".join(
-                    item["observation"]
-                    for item in memories
+               memory_context = "\n".join(
+                   item["observation"]
+                   for item in memories
                 )
+
+            elif agent_action == "search_web":
+              search_results = search_web(caregiver_message)
+
+              memory_context = "\n".join(
+                f"{item['title']}: {item['content']}"
+                for item in search_results
+            )
 
             # Step 3: Nemotron creates the final response
             result = analyze_caregiver_message(
