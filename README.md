@@ -5,7 +5,7 @@
 Elderly Mood Companion is being upgraded into CareFlow AI,
 an AI-powered elderly-care workflow assistant.
 
-### What CareFlow AI adds
+## What CareFlow AI adds
 
 - NVIDIA Nemotron LLM
 - Caregiver observation analysis
@@ -15,7 +15,7 @@ an AI-powered elderly-care workflow assistant.
 - Memory of previous observations
 - Agent decision-making
 
-### AI Workflow
+## AI Workflow
 
 Caregiver observation
         ↓
@@ -27,11 +27,11 @@ Memory / Analysis
         ↓
 CareFlow response
 
-### Milestone 1
+## Milestone 1
 - [x] NVIDIA Nemotron integration
 - [x] Structured AI analysis
 
-### Milestone 2
+## Milestone 2
 - [x] Memory storage
 - [x] Memory retrieval
 - [x] Agent decision-making
