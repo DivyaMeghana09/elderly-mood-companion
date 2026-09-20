@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 from openai import OpenAI
 from matplotlib.patches import Circle
+from memory import save_memory, get_memories
+
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
@@ -20,8 +22,39 @@ client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=api_key
 )
+def decide_agent_action(message):
+    response = client.chat.completions.create(
+        model="nvidia/nemotron-3-super-120b-a12b",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are the decision-making brain of CareFlow AI. "
+                    "Choose exactly one action for the caregiver message.\n\n"
+                    "Available actions:\n"
+                    "save_memory = a new observation about the elderly person "
+                    "that should be remembered.\n"
+                    "read_memory = the message refers to history, repetition, "
+                    "patterns, previous days, or asks what changed over time.\n"
+                    "analyze_only = no memory tool is needed.\n\n"
+                    "Return only valid JSON with exactly one key: action."
+                )
+            },
+            {
+                "role": "user",
+                "content": message
+            }
+        ],
+        temperature=0,
+        max_tokens=100
+    )
 
-def analyze_caregiver_message(message):
+    text = response.choices[0].message.content
+    decision = json.loads(text)
+
+    return decision["action"]
+
+def analyze_caregiver_message(message, memory_context=""):
     response = client.chat.completions.create(
         model="nvidia/nemotron-3-super-120b-a12b",
         messages=[
@@ -30,13 +63,17 @@ def analyze_caregiver_message(message):
                 "content": (
                     "You are CareFlow AI, an elderly-care assistant. "
                     "Do not diagnose medical conditions. "
+                    "Use previous observations when they are provided. "
                     "Return only valid JSON with exactly these keys: "
                     "observation, mood, follow_up, action."
                 )
             },
             {
                 "role": "user",
-                "content": f'Analyze this caregiver message: "{message}"'
+                "content": (
+                    f"Current caregiver message:\n{message}\n\n"
+                    f"Previous observations:\n{memory_context}"
+                )
             }
         ],
         temperature=0,
@@ -44,6 +81,7 @@ def analyze_caregiver_message(message):
     )
 
     text = response.choices[0].message.content
+
     return json.loads(text)
 
 st.set_page_config(page_title="Elderly Mood Companion", page_icon="❤️", layout="centered")
@@ -64,9 +102,32 @@ if st.button("Analyze with AI"):
     if caregiver_message.strip():
 
         try:
-            result = analyze_caregiver_message(caregiver_message)
+            # Step 1: Nemotron decides what tool is needed
+            agent_action = decide_agent_action(caregiver_message)
+
+            memory_context = ""
+
+            # Step 2: Python executes the chosen tool
+            if agent_action == "save_memory":
+                save_memory(caregiver_message)
+
+            elif agent_action == "read_memory":
+                memories = get_memories()
+
+                memory_context = "\n".join(
+                    item["observation"]
+                    for item in memories
+                )
+
+            # Step 3: Nemotron creates the final response
+            result = analyze_caregiver_message(
+                caregiver_message,
+                memory_context
+            )
 
             st.success("AI analysis completed")
+
+            st.caption(f"Agent decision: {agent_action}")
 
             st.write("### 👀 Observation")
             st.write(result["observation"])
@@ -85,7 +146,6 @@ if st.button("Analyze with AI"):
 
     else:
         st.warning("Please enter a caregiver message.")
-
 st.divider()
 
 # Mood Check

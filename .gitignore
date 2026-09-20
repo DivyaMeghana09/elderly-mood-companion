@@ -4,6 +4,7 @@ __pycache__/
 *.pyo
 *.pyd
 .env
+care_memory.json
 
 # Images (optional - we want to keep daily_rings.png)
 # *.png
