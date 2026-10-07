@@ -7,7 +7,10 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 from openai import OpenAI
 from matplotlib.patches import Circle
-from memory import save_memory, get_memories
+from memory import save_memory, get_memories, update_timeline
+from tasks import create_task, get_tasks
+from family_summary import generate_family_summary
+from human_attention import flag_human_attention, get_alerts
 from tavily import TavilyClient
 
 st.set_page_config(
@@ -19,15 +22,21 @@ st.set_page_config(
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
-api_key = os.getenv("NVIDIA_API_KEY")
+if "analysis_result" not in st.session_state:
+    st.session_state.analysis_result = None
 
-if not api_key:
-    st.error("NVIDIA_API_KEY not found. Check your .env file.")
+if "agent_action" not in st.session_state:
+    st.session_state.agent_action = None
+
+nebius_api_key = os.getenv("NEBIUS_API_KEY")
+
+if not nebius_api_key:
+    st.error("NEBIUS_API_KEY not found. Check your .env file.")
     st.stop()
 
 client = OpenAI(
-    base_url="https://integrate.api.nvidia.com/v1",
-    api_key=api_key
+    base_url="https://api.tokenfactory.nebius.com/v1",
+    api_key=nebius_api_key
 )
 
 tavily_client = TavilyClient(
@@ -37,39 +46,18 @@ tavily_client = TavilyClient(
 def decide_agent_action(message):
     message_lower = message.lower().strip()
 
-    # Questions about history/patterns → read memory
-    if "?" in message and any(word in message.lower() for word in [
-        "pattern", "history", "recent", "previous", "changed", "change"
-    ]):
-
-        return "read_memory"
-
-    # Questions asking for information → web search
-    if "?" in message:
-        return "search_web"
-
-    # Normal caregiver statements → save memory
-    return "save_memory"
-
-    # Clear information requests should use web search
-    web_triggers = [
-        "what are some",
-        "what are the",
-        "how can",
-        "how do",
-        "suggest",
-        "suggestions",
-        "ideas for",
-        "activities",
-        "recommend",
-        "recommendations",
-        "information about"
+    critical_triggers = [
+        "unusually confused",
+        "not responding",
+        "difficulty breathing",
+        "severe pain",
+        "fell and",
+        "fall and"
     ]
 
-    if "?" in message or any(trigger in message_lower for trigger in web_triggers):
-        return "search_web"
-
-    # Otherwise let Nemotron decide
+    if any(trigger in message_lower for trigger in critical_triggers):
+        return "flag_human_attention"
+    
     response = client.chat.completions.create(
         model="nvidia/nemotron-3-super-120b-a12b",
         messages=[
@@ -77,16 +65,30 @@ def decide_agent_action(message):
                 "role": "system",
                 "content": (
                     "You are the decision-making brain of CareFlow AI.\n\n"
-                    "Choose exactly ONE action.\n\n"
-                    "save_memory = save a new caregiver observation.\n"
+                    "Choose exactly ONE action for the caregiver message.\n\n"
+                    "save_memory = save a normal caregiver observation.\n"
                     "read_memory = retrieve previous observations or patterns.\n"
-                    "search_web = find external information or suggestions.\n"
-                    "analyze_only = simply analyze the current observation.\n\n"
-                    "Return ONLY one exact word:\n"
+                    "search_web = find useful external information.\n"
+                    "create_task = create a caregiver follow-up task.\n"
+                    "flag_human_attention = flag a situation that needs closer human attention.\n\n"
+                    "Use flag_human_attention only for situations that may require "
+                    "immediate or closer human attention, such as a fall, serious injury, "
+                    "unresponsiveness, difficulty breathing, or severe confusion.\n\n"
+
+                    "Examples:\n"
+                    "'Grandma skipped lunch today.' -> create_task\n"
+                    "'Grandma slept poorly last night.' -> create_task\n"
+                    "'What patterns have you noticed recently?' -> read_memory\n"
+                    "'Grandma fell and seems unusually confused.' -> flag_human_attention\n"
+                    "'What are some engaging activities for seniors?' -> search_web\n"
+                    "'Grandma enjoyed gardening today.' -> save_memory\n\n"
+
+                    "Return ONLY one exact action name:\n"
                     "save_memory\n"
                     "read_memory\n"
                     "search_web\n"
-                    "analyze_only\n"
+                    "create_task\n"
+                    "flag_human_attention\n\n"
                     "Do not explain."
                 )
             },
@@ -96,20 +98,21 @@ def decide_agent_action(message):
             }
         ],
         temperature=0,
-        max_tokens=20
+        max_tokens=100
     )
 
-    action = response.choices[0].message.content.strip()
+    action = (response.choices[0].message.content or "").strip()
 
     allowed_actions = {
         "save_memory",
         "read_memory",
         "search_web",
-        "analyze_only"
+        "create_task",
+        "flag_human_attention"
     }
 
     if action not in allowed_actions:
-        return "analyze_only"
+        return "save_memory"
 
     return action
 
@@ -122,6 +125,9 @@ def search_web(query):
 
     return response["results"]
 
+def run_update_timeline(observation, mood=""):
+    return update_timeline(observation, mood)
+
 def analyze_caregiver_message(message, context=""):
     response = client.chat.completions.create(
         model="nvidia/nemotron-3-super-120b-a12b",
@@ -130,7 +136,11 @@ def analyze_caregiver_message(message, context=""):
                 "role": "system",
                 "content": (
                     "You are CareFlow AI, an elderly-care assistant. "
-                    "Do not diagnose medical conditions. "
+                    "Do not diagnose medical conditions, prescribe treatment, or give detailed medical instructions. "
+                    "Focus on observations, caregiver follow-up, and when human attention may be needed. "
+                    "Keep the mood very short: use one or two simple words such as "
+                    "happy, sad, tired, calm, concerned, lonely, okay, or neutral. "
+                    "Do not give explanations inside the mood field. "
                     "Use the additional context when relevant. "
                     "Return ONLY valid JSON. "
                     "Do not use markdown. "
@@ -160,6 +170,23 @@ def analyze_caregiver_message(message, context=""):
     return json.loads(text)
 
 
+# Store CareFlow results between Streamlit reruns
+if "analysis_result" not in st.session_state:
+    st.session_state.analysis_result = None
+
+if "agent_action" not in st.session_state:
+    st.session_state.agent_action = None
+
+if "follow_up_task" not in st.session_state:
+    st.session_state.follow_up_task = None
+
+if "family_summary" not in st.session_state:
+    st.session_state.family_summary = None
+
+if "human_attention_alert" not in st.session_state:
+    st.session_state.human_attention_alert = None
+
+
 st.title("🌸 Elderly Mood Companion 🌸")
 st.markdown("Hello dear! Let's talk about your day together ❤️")
 
@@ -172,62 +199,137 @@ caregiver_message = st.text_area(
     placeholder="Example: Grandma did not sleep well and skipped breakfast."
 )
 
+
+# Analyze caregiver message
 if st.button("Analyze with AI"):
+
     if caregiver_message.strip():
 
         try:
-            # Step 1: Nemotron decides what tool is needed
+            # Step 1: Agent decides what tool is needed
             agent_action = decide_agent_action(caregiver_message)
 
             memory_context = ""
 
             # Step 2: Python executes the chosen tool
             if agent_action == "save_memory":
-               save_memory(caregiver_message)
+                pass
+
+            elif agent_action == "create_task":
+                pass
+
+            elif agent_action == "flag_human_attention":
+                pass
 
             elif agent_action == "read_memory":
-               memories = get_memories()
+                memories = get_memories()
 
-               memory_context = "\n".join(
-                   item["observation"]
-                   for item in memories
+                memory_context = "\n".join(
+                    item["observation"]
+                    for item in memories
+                    if "observation" in item
                 )
 
             elif agent_action == "search_web":
-              search_results = search_web(caregiver_message)
+                search_results = search_web(caregiver_message)
 
-              memory_context = "\n".join(
-                f"{item['title']}: {item['content']}"
-                for item in search_results
-            )
+                memory_context = "\n".join(
+                    f"{item['title']}: {item['content']}"
+                    for item in search_results
+                )
 
-            # Step 3: Nemotron creates the final response
+            # Step 3: Nemotron creates final response
             result = analyze_caregiver_message(
                 caregiver_message,
                 memory_context
             )
 
-            st.success("AI analysis completed")
+            # Save result in session
+            st.session_state.analysis_result = result
+            st.session_state.agent_action = agent_action
 
-            st.caption(f"Agent decision: {agent_action}")
+            # Create task if needed
+            if agent_action == "create_task":
+                task = create_task(result["follow_up"])
+                st.session_state.follow_up_task = task
+            else:
+                st.session_state.follow_up_task = None
 
-            st.write("### 👀 Observation")
-            st.write(result["observation"])
 
-            st.write("### 🙂 Mood")
-            st.write(result["mood"])
+            if agent_action == "flag_human_attention":
+                alert = flag_human_attention(result["observation"])
+                st.session_state.human_attention_alert = alert
+            else:
+                st.session_state.human_attention_alert = None
 
-            st.write("### ❓ Follow-up")
-            st.write(result["follow_up"])
+            # Save timeline if needed
+            if agent_action == "save_memory":
+                update_timeline(
+                    result["observation"],
+                    result["mood"]
+                )
 
-            st.write("### ✅ Caregiver Action")
-            st.write(result["action"])
+            # Clear old summary
+            st.session_state.family_summary = None
 
         except Exception as e:
             st.error(f"AI error: {e}")
 
     else:
         st.warning("Please enter a caregiver message.")
+
+
+# Display saved CareFlow result
+if st.session_state.analysis_result:
+
+    result = st.session_state.analysis_result
+    agent_action = st.session_state.agent_action
+
+    st.success("AI analysis completed")
+    st.caption(f"Agent decision: {agent_action}")
+
+    if st.session_state.follow_up_task:
+        st.write("### 📋 Follow-up Task")
+        st.info(st.session_state.follow_up_task["task"])
+        st.caption("Status: Pending")
+
+    if st.session_state.human_attention_alert:
+        st.warning("🚨 Human attention needed")
+        st.error(
+            st.session_state.human_attention_alert["reason"]
+        )
+        st.caption("Priority: High • Status: Open")
+
+    st.write("### 👀 Observation")
+    st.write(result["observation"])
+
+    st.write("### 🙂 Mood")
+    st.write(result["mood"])
+
+    st.write("### ❓ Follow-up")
+    st.write(result["follow_up"])
+
+    st.write("### ✅ Caregiver Action")
+    st.write(result["action"])
+
+    st.divider()
+
+    if st.button("Generate Family Summary"):
+
+        memories = get_memories()
+
+        st.session_state.family_summary = generate_family_summary(
+            client,
+            memories
+        )
+
+
+# Display family summary
+if st.session_state.family_summary:
+
+    st.write("### 👨‍👩‍👧 Family Summary")
+    st.info(st.session_state.family_summary)
+
 st.divider()
 
 # Mood Check
