@@ -217,6 +217,7 @@ if st.button("Analyze with AI"):
 
             elif agent_action == "create_task":
                 pass
+             
 
             elif agent_action == "flag_human_attention":
                 pass
@@ -263,7 +264,7 @@ if st.button("Analyze with AI"):
                 st.session_state.human_attention_alert = None
 
             # Save timeline if needed
-            if agent_action == "save_memory":
+            if agent_action in ["save_memory", "create_task", "flag_human_attention"]:
                 update_timeline(
                     result["observation"],
                     result["mood"]
