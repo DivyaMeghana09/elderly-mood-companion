@@ -47,4 +47,9 @@ def generate_family_summary(client, memories):
         max_tokens=300
     )
 
-    return response.choices[0].message.content.strip()
+    content = response.choices[0].message.content
+
+    if not content:
+        return "Family summary could not be generated right now. Please try again."
+
+    return content.strip()
