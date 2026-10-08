@@ -43,8 +43,8 @@ def generate_family_summary(client, memories):
                 )
             }
         ],
-        temperature=0.2,
-        max_tokens=300
+        temperature=0,
+        max_tokens=800
     )
 
     content = response.choices[0].message.content
