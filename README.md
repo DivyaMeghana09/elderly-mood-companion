@@ -1,6 +1,6 @@
 ### CareFlow AI — Elder Care Companion 🌸
 
-AI-powered coordination for safer, more personalized senior care.
+**AI-powered coordination for safer, more personalized senior care.**
 
 CareFlow AI combines a friendly senior wellness experience with an AI-powered caregiver workflow. It turns everyday care observations into structured information, follow-up tasks, care history, family summaries, and human-attention alerts.
 
@@ -12,73 +12,62 @@ Caregivers often receive scattered updates about an older adult's mood, meals, s
 
 CareFlow AI brings together two experiences:
 
-Senior wellness: mood check-ins and a nine-question daily wellness questionnaire with visual progress rings.
-
-Caregiver coordination: AI-assisted observation analysis, follow-up tasks, care history, family summaries, and human-attention alerts.
+- **Caregiver coordination:** AI-assisted observation analysis, follow-up tasks, care history, family summaries, and human-attention alerts.
+- **Senior wellness:** mood check-ins and a nine-question daily wellness questionnaire with visual progress rings.
 
 ### ✨ Key Features
 
-AI-powered analysis: NVIDIA Nemotron interprets caregiver messages and returns structured observations, mood, follow-up suggestions, and caregiver actions.
-
-Agent decision-making: Selects an appropriate action based on the caregiver's message.
-
-Care timeline: Saves observations and mood information for later reference.
-
-Follow-up tasks: Creates pending tasks for caregivers.
-
-Human-attention alerts: Flags potentially serious situations for human follow-up.
-
-Family Summary: Summarizes recent observations in simple language.
-
-Tavily web search: Retrieves external information when the agent chooses the search tool.
-
-Flexible mood check-in: Responds supportively to a range of feelings.
-
-Daily wellness rings: Visualizes answers to nine Yes/No questions about daily habits.
-
-Helpful habit tips: Offers suggestions when a wellness question is answered “No.”
+- **AI-powered analysis:** NVIDIA Nemotron interprets caregiver messages and returns structured observations, mood, follow-up suggestions, and caregiver actions.
+- **Agent decision-making:** Selects an appropriate action based on the caregiver's message.
+- **Care timeline:** Saves observations and mood information for later reference.
+- **Follow-up tasks:** Creates pending tasks for caregivers.
+- **Human-attention alerts:** Flags potentially serious situations for human follow-up.
+- **Family Summary:** Summarizes recent observations in simple language.
+- **Tavily web search:** Retrieves external information when the agent chooses the search tool.
+- **Flexible mood check-in:** Responds supportively to a range of feelings.
+- **Daily wellness rings:** Visualizes answers to nine Yes/No questions about daily habits.
+- **Helpful habit tips:** Offers suggestions when a wellness question is answered “No.”
 
 ### 🧠 How It Works
 
-A caregiver enters an observation or asks a question.
-
-The agent chooses an action, such as saving an observation, retrieving care history, creating a task, searching the web, or flagging human attention.
-
-Python executes the selected tool.
-
-NVIDIA Nemotron structures the observation, mood, follow-up, and caregiver action.
-
-CareFlow AI updates the relevant records and can generate a family summary.
+1. A caregiver enters an observation or asks a question.
+2. The agent chooses an action, such as saving an observation, retrieving care history, creating a task, searching the web, or flagging human attention.
+3. Python executes the selected tool.
+4. NVIDIA Nemotron structures the observation, mood, follow-up, and caregiver action.
+5. CareFlow AI updates the relevant records and can generate a family summary.
 
 ### 🏗️ Architecture
 
 ```text
-Senior Wellness Interface
-├── Mood Check-in
-└── Nine-question Wellness Check
+Caregiver Coordination
          │
          ▼
-  Python Wellness Scoring
-         │
-         ▼
-    Wellness Rings
-
-Caregiver Observation
-         │
-         ▼
-    CareFlow AI
+      CareFlow AI
          │
          ▼
  NVIDIA Nemotron 3 Super
    via Nebius Token Factory
          │
          ▼
-   Agent Decision
-   ├── Care Timeline / Memory
-   ├── Follow-up Tasks
-   ├── Human-attention Alerts
-   ├── Tavily Web Search
-   └── Family Summary
+    Agent Decision
+    ├── Care Timeline / Memory
+    ├── Follow-Up Tasks
+    ├── Human-Attention Alerts
+    ├── Tavily Web Search
+    └── Family Summary
+
+
+Senior Wellness Interface
+         │
+         ├── Mood Check-In
+         │
+         └── Nine-Question Wellness Check
+                      │
+                      ▼
+             Python Wellness Scoring
+                      │
+                      ▼
+                Wellness Rings
 ```
    
 ### 🛠️ Technology Stack
@@ -98,18 +87,20 @@ Caregiver Observation
 
 🚀 Run Locally
 
-Clone this repository:
+## 1. Clone this repository:
 ```
 git clone https://github.com/DivyaMeghana09/elderly-mood-companion.git
 cd elderly-mood-companion
 ```
-Install dependencies:
+## 2. Install dependencies:
 ```
 pip install -r requirements.txt
 ```
+## 3. Configure API keys
+
 Create a local .env file containing the API keys required by the application. Never commit API keys or .env to GitHub.
 
-Start the Streamlit app:
+## 4. Start the application:
 ```
 streamlit run app.py
 ```
@@ -153,7 +144,7 @@ Built for the Nebius × NVIDIA Global AI Hackathon, using NVIDIA Nemotron throug
 
 ### 📄 License
 
-This project is licensed under the MIT License. See LICENSE for details, if that file is present in the repository.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 Made with care for seniors and the people who support them. 💕
 
