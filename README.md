@@ -85,22 +85,22 @@ Senior Wellness Interface
 
 [🌸 Try CareFlow AI — Elder Care Companion](https://elderly-mood-companion.streamlit.app/)
 
-🚀 Run Locally
+### 🚀 Run Locally
 
-## 1. Clone this repository:
+**1. Clone this repository:**
 ```
 git clone https://github.com/DivyaMeghana09/elderly-mood-companion.git
 cd elderly-mood-companion
 ```
-## 2. Install dependencies:
+**2. Install dependencies:**
 ```
 pip install -r requirements.txt
 ```
-## 3. Configure API keys
+**3. Configure API keys**
 
 Create a local .env file containing the API keys required by the application. Never commit API keys or .env to GitHub.
 
-## 4. Start the application:
+**4. Start the application:**
 ```
 streamlit run app.py
 ```
