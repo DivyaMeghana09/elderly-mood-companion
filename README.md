@@ -1,4 +1,4 @@
-### CareFlow AI — Elder Care Companion 🌸
+# CareFlow AI — Elder Care Companion 🌸
 
 **AI-powered coordination for safer, more personalized senior care.**
 
