@@ -51,46 +51,46 @@ NVIDIA Nemotron structures the observation, mood, follow-up, and caregiver actio
 CareFlow AI updates the relevant records and can generate a family summary.
 
 ### 🏗️ Architecture
-```
+
+```text
 Senior Wellness Interface
-  ├── Mood Check-in
-  └── Nine-question Wellness Check
-             │
-             ▼
-       Wellness Rings
+├── Mood Check-in
+└── Nine-question Wellness Check
+         │
+         ▼
+  Python Wellness Scoring
+         │
+         ▼
+    Wellness Rings
 
 Caregiver Observation
-             │
-             ▼
-       CareFlow AI
-             │
-             ▼
-     NVIDIA Nemotron
-      via Nebius Token Factory
-             │
-             ▼
-       Agent Decision
-       ├── Care Timeline / Memory
-       ├── Follow-up Tasks
-       ├── Human-attention Alerts
-       ├── Tavily Web Search
-       └── Family Summary
+         │
+         ▼
+    CareFlow AI
+         │
+         ▼
+ NVIDIA Nemotron 3 Super
+   via Nebius Token Factory
+         │
+         ▼
+   Agent Decision
+   ├── Care Timeline / Memory
+   ├── Follow-up Tasks
+   ├── Human-attention Alerts
+   ├── Tavily Web Search
+   └── Family Summary
 ```
+   
 ### 🛠️ Technology Stack
 
-Python — application logic and tools
-
-Streamlit — web interface and hosting
-
-NVIDIA Nemotron 3 Super — language model for AI analysis and agent decisions
-
-Nebius Token Factory — model inference API
-
-Tavily — external web search
-
-Matplotlib — wellness ring visualizations
-
-JSON files — local care timeline, tasks, and alert storage
+- Python — application logic and tools
+- Streamlit — web interface
+- Streamlit Community Cloud — deployment
+- NVIDIA Nemotron 3 Super — AI analysis and agent decisions
+- Nebius Token Factory — model inference API
+- Tavily — external web search
+- Matplotlib — wellness ring visualizations
+- JSON files — prototype storage for care timeline, follow-up tasks, and human-attention alerts
 
 ### 🌐 Live Demo
 
