@@ -14,8 +14,8 @@ from human_attention import flag_human_attention, get_alerts
 from tavily import TavilyClient
 
 st.set_page_config(
-    page_title="Elderly Mood Companion",
-    page_icon="❤️",
+    page_title="CareFlow AI — Elder Care Companion",
+    page_icon="🌸",
     layout="centered"
 )
 
@@ -187,12 +187,12 @@ if "human_attention_alert" not in st.session_state:
     st.session_state.human_attention_alert = None
 
 
-st.title("🌸 Elderly Mood Companion 🌸")
-st.markdown("Hello dear! Let's talk about your day together ❤️")
+st.title("🌸 CareFlow AI — Elder Care Companion ")
+st.markdown("Helping families turn everyday senior observations into organized, proactive care. ❤️")
 
 st.divider()
 
-st.subheader("🤖 CareFlow AI — NVIDIA Nemotron")
+st.subheader("CareFlow AI — Intelligent Care Assistant")
 
 caregiver_message = st.text_area(
     "Tell me what happened today:",
@@ -334,22 +334,44 @@ if st.session_state.family_summary:
 st.divider()
 
 # Mood Check
-mood = st.text_input("How are you feeling today? (happy, sad, tired, okay, lonely)", key="mood")
+mood = st.text_input("😊 How are you feeling today?", key="mood")
 
 if mood:
-    mood = mood.lower()
-    if "happy" in mood:
-        st.success("Wonderful! I'm so glad 😊")
-    elif "sad" in mood or "lonely" in mood:
-        st.info("I'm here with you. Here's a small joke:")
-        st.write("Why did the scarecrow win an award? Because he was outstanding in his field! 😂")
-    elif "tired" in mood:
-        st.info("Rest well dear. Take it easy today.")
-    else:
-        st.info("Thank you for sharing. You are never alone 💕")
+    mood_lower = mood.lower().strip()
 
+    if any(word in mood_lower for word in ["happy", "joyful", "great", "good", "wonderful"]):
+        st.success("Wonderful! I'm so glad you're feeling good today. 😊")
+
+    elif any(word in mood_lower for word in ["sad", "lonely", "alone"]):
+        st.info("Thank you for sharing. I'm here with you. 💕")
+
+    elif any(word in mood_lower for word in ["tired", "sleepy", "exhausted"]):
+        st.info("Rest well dear. Take it easy today. 🌸")
+
+    elif any(word in mood_lower for word in ["bored", "boring"]):
+        st.info("Feeling bored can happen. Would you like to try a favorite activity, music, or a little conversation? 💕")
+
+    elif any(word in mood_lower for word in ["worried", "anxious", "nervous", "concerned"]):
+        st.info("Thank you for sharing. Let's keep today gentle and comfortable. 💕")
+
+    elif any(word in mood_lower for word in ["excited", "energetic"]):
+        st.success("That's wonderful! What would you enjoy doing today? 😊")
+
+    elif any(word in mood_lower for word in ["calm", "peaceful", "relaxed"]):
+        st.success("That's lovely. Enjoy this peaceful moment. 🌸")
+
+    elif any(word in mood_lower for word in ["angry", "frustrated", "upset"]):
+        st.info("Thank you for sharing how you feel. Let's take things gently today. 💕")
+
+    else:
+        st.info(
+            f"Thank you for sharing that you're feeling {mood}. "
+            "Your feelings are important. 💕"
+        )
+        
     st.divider()
-    st.subheader("Now let's do a simple Q&A about your 24-hour day:")
+    st.header("💚 Daily Wellness Check-in")
+    st.write("A simple self-reported snapshot of today's habits and wellbeing.")
 
     # ... (Keep your existing Q&A and rings code here)
     # You can copy the Q&A + rings part from your previous app.py
