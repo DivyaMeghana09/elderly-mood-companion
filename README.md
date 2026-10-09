@@ -1,14 +1,14 @@
-CareFlow AI — Elder Care Companion 🌸
+### CareFlow AI — Elder Care Companion 🌸
 
 AI-powered coordination for safer, more personalized senior care.
 
 CareFlow AI combines a friendly senior wellness experience with an AI-powered caregiver workflow. It turns everyday care observations into structured information, follow-up tasks, care history, family summaries, and human-attention alerts.
 
-💡 The Problem
+### 💡 The Problem
 
 Caregivers often receive scattered updates about an older adult's mood, meals, sleep, daily habits, and wellbeing. Keeping track of these observations and remembering when to follow up can be difficult.
 
-💚 Our Solution
+### 💚 Our Solution
 
 CareFlow AI brings together two experiences:
 
@@ -16,7 +16,7 @@ Senior wellness: mood check-ins and a nine-question daily wellness questionnaire
 
 Caregiver coordination: AI-assisted observation analysis, follow-up tasks, care history, family summaries, and human-attention alerts.
 
-✨ Key Features
+### ✨ Key Features
 
 AI-powered analysis: NVIDIA Nemotron interprets caregiver messages and returns structured observations, mood, follow-up suggestions, and caregiver actions.
 
@@ -38,7 +38,7 @@ Daily wellness rings: Visualizes answers to nine Yes/No questions about daily ha
 
 Helpful habit tips: Offers suggestions when a wellness question is answered “No.”
 
-🧠 How It Works
+### 🧠 How It Works
 
 A caregiver enters an observation or asks a question.
 
@@ -50,7 +50,7 @@ NVIDIA Nemotron structures the observation, mood, follow-up, and caregiver actio
 
 CareFlow AI updates the relevant records and can generate a family summary.
 
-🏗️ Architecture
+### 🏗️ Architecture
 ```
 Senior Wellness Interface
   ├── Mood Check-in
@@ -76,7 +76,7 @@ Caregiver Observation
        ├── Tavily Web Search
        └── Family Summary
 ```
-🛠️ Technology Stack
+### 🛠️ Technology Stack
 
 Python — application logic and tools
 
@@ -92,7 +92,7 @@ Matplotlib — wellness ring visualizations
 
 JSON files — local care timeline, tasks, and alert storage
 
-🌐 Live Demo
+### 🌐 Live Demo
 
 Try CareFlow AI →
 
@@ -113,13 +113,13 @@ Start the Streamlit app:
 ```
 streamlit run app.py
 ```
-🔐 Safety and Privacy
+### 🔐 Safety and Privacy
 
 CareFlow AI is designed to support caregiver coordination, not replace professional care. It does not diagnose medical conditions or prescribe treatment. Potentially serious situations should receive appropriate human and professional attention.
 
 Do not enter unnecessary sensitive personal or medical information into a demo. The current prototype uses local JSON-based storage for care records.
 
-## 📸 Screenshots
+### 📸 Screenshots
 
 **1. CareFlow AI — Main Interface**
 
@@ -147,16 +147,14 @@ Nine Yes/No questions generate visual rings that summarize self-reported daily h
 
 *Example: 6 out of 9 healthy habits completed*
 
-🏆 Hackathon
+### 🏆 Hackathon
 
 Built for the Nebius × NVIDIA Global AI Hackathon, using NVIDIA Nemotron through Nebius Token Factory.
 
-📄 License
+### 📄 License
 
 This project is licensed under the MIT License. See LICENSE for details, if that file is present in the repository.
 
 Made with care for seniors and the people who support them. 💕
 
-ts, encouraging consistent daily routines.
 
-Made with love for seniors 💕
