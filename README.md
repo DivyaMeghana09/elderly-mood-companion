@@ -112,25 +112,25 @@ Do not enter unnecessary sensitive personal or medical information into a demo. 
 
 ### 📸 Screenshots
 
-**1. CareFlow AI — Main Interface**
+### 1. CareFlow AI — Main Interface
 
 The caregiver enters an everyday observation, and CareFlow AI analyzes it using NVIDIA Nemotron.
 
 ![CareFlow AI Main Interface](careflow-interface.png)
 
-**2. AI Care Workflow**
+### 2. AI Care Workflow
 
 CareFlow AI converts an observation into a follow-up task, identifies mood, suggests caregiver action, and generates a family summary.
 
 ![AI Care Workflow](careflow-workflow.png)
 
-**3. Human-Attention Safety Alert**
+### 3. Human-Attention Safety Alert
 
 When a potentially serious situation is reported, CareFlow AI flags it for human attention with a priority and status.
 
 ![Human-Attention Safety Alert](careflow-alert.png)
 
-**4. Daily Wellness Rings**
+### 4. Daily Wellness Rings**
 
 Nine Yes/No questions generate visual rings that summarize self-reported daily habits and wellbeing.
  
