@@ -3,11 +3,17 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.env
-care_memory.json
 
-# Images (optional - we want to keep daily_rings.png)
-# *.png
+# Secrets
+.env
+
+# Generated care data
+care_memory.json
+care_tasks.json
+human_attention.json
+
+# Images
+# Keep screenshots and daily_rings.png tracked
 
 # VS Code
 .vscode/
