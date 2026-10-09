@@ -94,7 +94,7 @@ JSON files — local care timeline, tasks, and alert storage
 
 ### 🌐 Live Demo
 
-Try CareFlow AI →
+[🌸 Try CareFlow AI — Elder Care Companion](https://elderly-mood-companion.streamlit.app/)
 
 🚀 Run Locally
 
