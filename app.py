@@ -341,26 +341,32 @@ if (
                 st.markdown(f"- **{title}**")
 
             if content:
-                # Remove Markdown headings and formatting
-                clean_content = re.sub(
-                    r"(?m)^\s*#{1,6}\s*", "", content
-                )
-                clean_content = re.sub(r"[*_`]", "", clean_content)
-                clean_content = re.sub(
-                    r"\s+", " ", clean_content
-                ).strip()
+                # Clean source text and remove Markdown headings
+                clean_content = re.sub(r"(?m)^\s*#{1,6}\s*", "", content)
+                clean_content = re.sub(r"[*_`#]", "", clean_content)
+                clean_content = re.sub(r"\s+", " ", clean_content).strip()
 
-                # Limit preview without cutting a word
+                # Add a separator after common headings when joined to text
+                clean_content = re.sub(
+                    r"\b(Creative pursuits|Reduced Stress|Less Boredom|"
+                    r"Description|Fun activities for seniors)\s*",
+                    r"\1: ",
+                    clean_content,
+                    flags=re.IGNORECASE,
+                )
+
+                # Limit preview without cutting words
                 max_length = 220
 
                 if len(clean_content) > max_length:
-                    preview = clean_content[:max_length].rsplit(
-                        " ", 1
-                    )[0].rstrip(".,;: ") + "..."
+                    preview = clean_content[:max_length].rsplit(" ", 1)[0]
+                    preview = preview.rstrip(".,;: ") + "..."
                 else:
                     preview = clean_content
 
                 st.caption(preview)
+
+               
     else:
         st.info("No web sources were returned for this search.")
 
