@@ -333,6 +333,9 @@ if (
         for item in search_results:
             title = item.get("title", "Web source")
             url = item.get("url")
+            # Skip the Kendal page that returns 403 Forbidden
+            if url and "kohud.kendal.org" in url:
+                continue
             content = item.get("content", "")
 
             if url:
