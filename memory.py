@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 MEMORY_FILE = Path(__file__).parent / "care_memory.json"
 
@@ -24,12 +25,16 @@ def get_memories():
         return json.load(f)
 
 
+
 def update_timeline(observation, mood=""):
     memory = get_memories()
 
+    # Use India Standard Time (IST)
+    now = datetime.now(ZoneInfo("Asia/Kolkata"))
+
     entry = {
-        "date": datetime.now().strftime("%Y-%m-%d"),
-        "time": datetime.now().strftime("%H:%M"),
+        "date": now.strftime("%Y-%m-%d"),
+        "time": now.strftime("%H:%M"),
         "observation": observation,
         "mood": mood
     }
