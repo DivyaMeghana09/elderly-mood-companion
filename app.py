@@ -319,7 +319,12 @@ if st.session_state.analysis_result:
     
 
 
-if agent_action == "search_web":
+
+# Display web sources for the saved search result
+if (
+    st.session_state.analysis_result
+    and st.session_state.get("agent_action") == "search_web"
+):
     search_results = st.session_state.get("web_search_results", [])
 
     if search_results:
@@ -330,7 +335,6 @@ if agent_action == "search_web":
             url = item.get("url")
             content = item.get("content", "")
 
-            # Display clickable source title
             if url:
                 st.markdown(f"- [{title}]({url})")
             else:
@@ -338,33 +342,30 @@ if agent_action == "search_web":
 
             if content:
                 # Remove Markdown headings and formatting
-                clean_content = re.sub(r"(?m)^\s*#{1,6}\s*", "", content)
-                clean_content = re.sub(r"[*_`]", "", clean_content)
-                clean_content = re.sub(r"\s+", " ", clean_content).strip()
-
-                # Add spacing where words are joined by capitalization
                 clean_content = re.sub(
-                    r"([a-z])([A-Z])",
-                    r"\1. \2",
-                    clean_content
+                    r"(?m)^\s*#{1,6}\s*", "", content
                 )
+                clean_content = re.sub(r"[*_`]", "", clean_content)
+                clean_content = re.sub(
+                    r"\s+", " ", clean_content
+                ).strip()
 
-                # Keep the preview within 220 characters
+                # Limit preview without cutting a word
                 max_length = 220
 
                 if len(clean_content) > max_length:
-                    preview = clean_content[:max_length].rsplit(" ", 1)[0]
-                    preview = preview.rstrip(".,;: ") + "..."
+                    preview = clean_content[:max_length].rsplit(
+                        " ", 1
+                    )[0].rstrip(".,;: ") + "..."
                 else:
                     preview = clean_content
 
-                # Render as plain, small caption text
                 st.caption(preview)
-
     else:
         st.info("No web sources were returned for this search.")
 
 st.divider()
+
 
 if st.button("Generate Family Summary"):
     memories = get_memories()
