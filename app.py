@@ -236,10 +236,10 @@ if st.button("Analyze with AI"):
 
                 st.session_state.web_search_results = search_results
 
-               memory_context = "\n".join(
-                   f"{item['title']}: {item['content']}"
-                   for item in search_results
-               )
+                memory_context = "\n".join(
+                    f"{item['title']}: {item['content']}"
+                    for item in search_results
+                )
                 
             # Step 3: Nemotron creates final response
             result = analyze_caregiver_message(
