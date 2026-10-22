@@ -318,24 +318,23 @@ if st.session_state.analysis_result:
     if agent_action == "search_web":
         search_results = st.session_state.get("web_search_results", [])
 
-    if search_results:
-        st.write("### 🔎 Web Sources")
+        if search_results:
+            st.write("### 🔎 Web Sources")
 
-        for item in search_results:
-            title = item.get("title", "Web source")
-            url = item.get("url")
-            content = item.get("content", "")
+            for item in search_results:
+                title = item.get("title", "Web source")
+                url = item.get("url")
+                content = item.get("content", "")
 
-            if url:
-                st.markdown(f"- [{title}]({url})")
-            else:
-                st.markdown(f"- **{title}**")
+                if url:
+                    st.markdown(f"- [{title}]({url})")
+                else:
+                    st.markdown(f"- **{title}**")
 
-            if content:
-                st.caption(content[:250] + ("..." if len(content) > 250 else ""))
-     else:
-         st.info("No web sources were returned for this search.")
-
+                if content:
+                    st.caption(content[:250] + ("..." if len(content) > 250 else ""))
+        else:
+            st.info("No web sources were returned for this search.")
 st.divider()
 
     if st.button("Generate Family Summary"):
