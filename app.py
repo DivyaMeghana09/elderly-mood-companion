@@ -332,7 +332,27 @@ if st.session_state.analysis_result:
                     st.markdown(f"- **{title}**")
 
                 if content:
-                    st.caption(content[:250] + ("..." if len(content) > 250 else ""))
+                    clean_content = " ".join(content.split())
+                    sentences = clean_content.split(". ")
+                    preview = ""
+
+                    for sentence in sentences:
+                         sentence = sentence.strip()
+                         if not sentence:
+                             continue
+
+                         candidate = (preview + " " + sentence).strip()
+
+                         if len(candidate) > 250:
+                             break
+
+                         preview = candidate
+
+                    if preview and not preview.endswith((".", "!", "?")):
+                        preview += "."
+
+                    st.caption(preview or clean_content[:200])
+                    
         else:
             st.info("No web sources were returned for this search.")
 st.divider()
