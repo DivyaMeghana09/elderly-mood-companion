@@ -47,14 +47,27 @@ tavily_client = TavilyClient(
 def decide_agent_action(message):
     message_lower = message.lower().strip()
 
+    
     critical_triggers = [
         "unusually confused",
+        "suddenly confused",
+        "new confusion",
+        "sudden confusion",
         "not responding",
+        "unresponsive",
         "difficulty breathing",
+        "trouble breathing",
+        "can't breathe",
+        "cannot breathe",
         "severe pain",
         "fell and",
-        "fall and"
+        "fall and",
+        "fallen and",
+        "hit their head",
+        "hit her head",
+        "hit his head"
     ]
+
 
     if any(trigger in message_lower for trigger in critical_triggers):
         return "flag_human_attention"
