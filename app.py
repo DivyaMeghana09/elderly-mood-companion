@@ -337,14 +337,13 @@ if st.session_state.analysis_result:
             st.info("No web sources were returned for this search.")
 st.divider()
 
-    if st.button("Generate Family Summary"):
+if st.button("Generate Family Summary"):
+    memories = get_memories()
 
-        memories = get_memories()
-
-        st.session_state.family_summary = generate_family_summary(
-            client,
-            memories
-        )
+    st.session_state.family_summary = generate_family_summary(
+        client,
+        memories
+    )
 
 
 # Display family summary
