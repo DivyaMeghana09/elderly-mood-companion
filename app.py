@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from pathlib import Path
 
 import streamlit as st
@@ -315,46 +316,54 @@ if st.session_state.analysis_result:
     st.write("### ✅ Caregiver Action")
     st.write(result["action"])
 
-    if agent_action == "search_web":
-        search_results = st.session_state.get("web_search_results", [])
+    
 
-        if search_results:
-            st.write("### 🔎 Web Sources")
 
-            for item in search_results:
-                title = item.get("title", "Web source")
-                url = item.get("url")
-                content = item.get("content", "")
+if agent_action == "search_web":
+    search_results = st.session_state.get("web_search_results", [])
 
-                if url:
-                    st.markdown(f"- [{title}]({url})")
+    if search_results:
+        st.markdown("### 🔎 Web Sources")
+
+        for item in search_results:
+            title = item.get("title", "Web source")
+            url = item.get("url")
+            content = item.get("content", "")
+
+            # Display clickable source title
+            if url:
+                st.markdown(f"- [{title}]({url})")
+            else:
+                st.markdown(f"- **{title}**")
+
+            if content:
+                # Remove Markdown headings and formatting
+                clean_content = re.sub(r"(?m)^\s*#{1,6}\s*", "", content)
+                clean_content = re.sub(r"[*_`]", "", clean_content)
+                clean_content = re.sub(r"\s+", " ", clean_content).strip()
+
+                # Add spacing where words are joined by capitalization
+                clean_content = re.sub(
+                    r"([a-z])([A-Z])",
+                    r"\1. \2",
+                    clean_content
+                )
+
+                # Keep the preview within 220 characters
+                max_length = 220
+
+                if len(clean_content) > max_length:
+                    preview = clean_content[:max_length].rsplit(" ", 1)[0]
+                    preview = preview.rstrip(".,;: ") + "..."
                 else:
-                    st.markdown(f"- **{title}**")
+                    preview = clean_content
 
-                if content:
-                    clean_content = " ".join(content.split())
-                    sentences = clean_content.split(". ")
-                    preview = ""
+                # Render as plain, small caption text
+                st.caption(preview)
 
-                    for sentence in sentences:
-                         sentence = sentence.strip()
-                         if not sentence:
-                             continue
+    else:
+        st.info("No web sources were returned for this search.")
 
-                         candidate = (preview + " " + sentence).strip()
-
-                         if len(candidate) > 250:
-                             break
-
-                         preview = candidate
-
-                    if preview and not preview.endswith((".", "!", "?")):
-                        preview += "."
-
-                    st.caption(preview or clean_content[:200])
-                    
-        else:
-            st.info("No web sources were returned for this search.")
 st.divider()
 
 if st.button("Generate Family Summary"):
