@@ -256,10 +256,11 @@ if st.button("Analyze with AI"):
                 )
                 
             # Step 3: Nemotron creates final response
-            result = analyze_caregiver_message(
-                caregiver_message,
-                memory_context
-            )
+            if agent_action == "save_memory":
+                update_timeline(
+                    result["observation"],
+                    result["mood"]
+                )
 
             # Save result in session
             st.session_state.analysis_result = result
