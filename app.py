@@ -281,10 +281,11 @@ if st.button("Analyze with AI"):
 
             # Save timeline if needed
             if agent_action in ["save_memory", "create_task", "flag_human_attention"]:
-                update_timeline(
-                    result["observation"],
-                    result["mood"]
-                )
+                if agent_action != "save_memory":
+                    update_timeline(
+                        result["observation"],
+                        result["mood"]
+                    )
 
             # Clear old summary
             st.session_state.family_summary = None
