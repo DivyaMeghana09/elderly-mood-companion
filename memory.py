@@ -9,12 +9,19 @@ MEMORY_FILE = Path(__file__).parent / "care_memory.json"
 def save_memory(observation):
     memory = get_memories()
 
+    now = datetime.now(ZoneInfo("Asia/Kolkata"))
+
     memory.append({
-        "observation": observation
+        "date": now.strftime("%Y-%m-%d"),
+        "time": now.strftime("%H:%M"),
+        "observation": observation,
+        "mood": ""
     })
 
     with open(MEMORY_FILE, "w", encoding="utf-8") as f:
         json.dump(memory, f, indent=2)
+
+
 
 
 def get_memories():
