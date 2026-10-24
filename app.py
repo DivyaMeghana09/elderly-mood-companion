@@ -269,7 +269,9 @@ if st.button("Analyze with AI"):
                     result["mood"]
             )
             st.success(
-                f"Saved: {saved_entry['date']} {saved_entry['time']} IST"
+                f"Observation saved: {saved_entry['date']} "
+                f"{saved_entry['time']} IST"
+                
             )
 
             # Save result in session
