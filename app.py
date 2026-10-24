@@ -262,13 +262,16 @@ if st.button("Analyze with AI"):
                 memory_context
             )
 
-            # Save the observation with its timestamp
+            # Then save the observation
             if agent_action == "save_memory":
-                update_timeline(
+                saved_entry = update_timeline(
                     result["observation"],
                     result["mood"]
             )
-
+            st.success(
+                f"Observation saved at {saved_entry['date']} "
+                f"{saved_entry['time']}"
+            )
 
             # Save result in session
             st.session_state.analysis_result = result
