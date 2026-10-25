@@ -289,6 +289,12 @@ if st.button("Analyze with AI"):
             if agent_action == "flag_human_attention":
                 alert = flag_human_attention(result["observation"])
                 st.session_state.human_attention_alert = alert
+                st.error(
+                    "🚨 A fall with new confusion may be a medical emergency. "
+                    "Contact local emergency services now. Avoid moving the person "
+                    "unless there is immediate danger or movement is necessary "
+                    "to provide lifesaving care."
+                )
             else:
                 st.session_state.human_attention_alert = None
 
