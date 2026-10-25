@@ -270,8 +270,8 @@ if st.button("Analyze with AI"):
                 )
                 memories = get_memories()
                 st.success(
-                    f"Observation saved: {saved_entry['date']} "
-                    f"{saved_entry['time']} IST"
+                    f"Saved and verified: {len(memories)} entries. "
+                    f"Latest: {memories[-1]['observation']}"   
                 )
 
             # Save result in session
