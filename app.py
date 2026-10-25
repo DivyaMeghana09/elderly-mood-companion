@@ -268,6 +268,7 @@ if st.button("Analyze with AI"):
                     result["observation"],
                     result["mood"]
                 )
+                memories = get_memories()
                 st.success(
                     f"Observation saved: {saved_entry['date']} "
                     f"{saved_entry['time']} IST"
