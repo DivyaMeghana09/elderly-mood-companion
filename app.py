@@ -267,12 +267,11 @@ if st.button("Analyze with AI"):
                 saved_entry = update_timeline(
                     result["observation"],
                     result["mood"]
-            )
-            st.success(
-                f"Observation saved: {saved_entry['date']} "
-                f"{saved_entry['time']} IST"
-                
-            )
+                )
+                st.success(
+                    f"Observation saved: {saved_entry['date']} "
+                    f"{saved_entry['time']} IST"
+                )
 
             # Save result in session
             st.session_state.analysis_result = result
