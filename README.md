@@ -138,6 +138,10 @@ Nine Yes/No questions generate visual rings that summarize self-reported daily h
 
 *Example: 6 out of 9 healthy habits completed*
 
+### 5. Emergency Safety Response
+
+![Emergency Safety Response](careflow-safety-response.png)
+
 ### 🏆 Hackathon
 
 Built for the Nebius × NVIDIA Global AI Hackathon, using NVIDIA Nemotron through Nebius Token Factory.
