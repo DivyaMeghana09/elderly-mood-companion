@@ -261,6 +261,16 @@ if st.button("Analyze with AI"):
                 caregiver_message,
                 memory_context
             )
+            if agent_action == "flag_human_attention":
+                result["follow_up"] = (
+                    "Seek emergency medical assessment now. "
+                    "Do not wait for symptoms to worsen."
+                )
+                result["action"] = (
+                    "Contact local emergency services now. "
+                    "Avoid moving the person unless there is immediate "
+                    "danger or movement is necessary to provide lifesaving care."
+                )
 
             # Then save the observation
             if agent_action == "save_memory":
