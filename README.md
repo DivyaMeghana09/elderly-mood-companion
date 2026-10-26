@@ -128,7 +128,7 @@ CareFlow AI converts an observation into a follow-up task, identifies mood, sugg
 
 When a potentially serious situation is reported, CareFlow AI flags it for human attention with a priority and status.
 
-![Human-Attention Safety Alert](careflow-alert.png)
+![Human-Attention Safety Alert](careflow-emergency-alert.png)
 
 ### 4. Daily Wellness Rings
 
