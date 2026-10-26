@@ -14,6 +14,7 @@ from family_summary import generate_family_summary
 from human_attention import flag_human_attention, get_alerts
 from tavily import TavilyClient
 from database import test_database_connection
+from database import test_database_write_read
 
 st.set_page_config(
     page_title="CareFlow AI — Elder Care Companion",
@@ -548,6 +549,14 @@ st.caption("Made with love for seniors 💕")
 with st.sidebar.expander("Database connection test"):
     if st.button("Test Supabase connection"):
         success, message = test_database_connection()
+        if success:
+            st.success(message)
+        else:
+            st.error(message)
+
+with st.sidebar.expander("Database write/read test"):
+    if st.button("Run database test"):
+        success, message = test_database_write_read()
         if success:
             st.success(message)
         else:
