@@ -130,7 +130,7 @@ When a potentially serious situation is reported, CareFlow AI flags it for human
 
 ![Human-Attention Safety Alert](careflow-alert.png)
 
-### 4. Daily Wellness Rings**
+### 4. Daily Wellness Rings
 
 Nine Yes/No questions generate visual rings that summarize self-reported daily habits and wellbeing.
  
