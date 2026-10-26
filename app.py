@@ -13,6 +13,7 @@ from tasks import create_task, get_tasks
 from family_summary import generate_family_summary
 from human_attention import flag_human_attention, get_alerts
 from tavily import TavilyClient
+from database import test_database_connection
 
 st.set_page_config(
     page_title="CareFlow AI — Elder Care Companion",
@@ -543,3 +544,12 @@ if mood:
         st.success("✅ Rings saved as daily_rings.png")
 
 st.caption("Made with love for seniors 💕")
+
+with st.sidebar.expander("Database connection test"):
+    if st.button("Test Supabase connection"):
+        success, message = test_database_connection()
+        if success:
+            st.success(message)
+        else:
+            st.error(message)
+
