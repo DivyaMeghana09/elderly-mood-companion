@@ -3,3 +3,4 @@ matplotlib
 openai
 python-dotenv
 tavily-python
+supabase
