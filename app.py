@@ -15,6 +15,7 @@ from human_attention import flag_human_attention, get_alerts
 from tavily import TavilyClient
 from database import test_database_connection
 import database
+from database import save_observation_to_db, get_observations_from_db
 
 st.set_page_config(
     page_title="CareFlow AI — Elder Care Companion",
