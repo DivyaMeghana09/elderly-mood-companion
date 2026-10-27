@@ -67,3 +67,21 @@ def get_observations_from_db(limit=50):
         .execute()
     )
     return response.data
+
+
+def save_task_to_db(task):
+    client = get_supabase_client()
+    record = {
+        "record_type": "task",
+        "content": task,
+    }
+    return client.table("care_records").insert(record).execute()
+
+
+def save_alert_to_db(alert):
+    client = get_supabase_client()
+    record = {
+        "record_type": "alert",
+        "content": alert,
+    }
+    return client.table("care_records").insert(record).execute()
