@@ -281,15 +281,24 @@ if st.button("Analyze with AI"):
                     result["observation"],
                     result["mood"]
                 )
-                memories = get_memories()
-                st.success(
-                    f"Saved and verified: {len(memories)} entries. "
-                    f"Latest: {memories[-1]['observation']}"   
-                )
+                
+                try:
+                    save_observation_to_db(
+                        result["observation"],
+                        result["mood"]
+                    )
+                    st.success("Observation saved to JSON and Supabase.")
+                except Exception as exc:
+                    st.warning(
+                        "Observation saved to JSON. "
+                        "Supabase save failed; JSON remains the fallback."
+                    )
 
-            # Save result in session
-            st.session_state.analysis_result = result
-            st.session_state.agent_action = agent_action
+                memories = get_memories()
+                st.caption(
+                    f"Local JSON records: {len(memories)}. "
+                    f"Latest: {memories[-1]['observation']}"
+                )
 
             # Create task if needed
             if agent_action == "create_task":
