@@ -17,3 +17,6 @@ human_attention.json
 
 # VS Code
 .vscode/
+
+
+.streamlit/secrets.toml
