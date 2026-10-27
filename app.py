@@ -264,6 +264,8 @@ if st.button("Analyze with AI"):
                 caregiver_message,
                 memory_context
             )
+            st.session_state.analysis_result = result
+            
             if agent_action == "flag_human_attention":
                 result["follow_up"] = (
                     "Seek emergency medical assessment now. "
