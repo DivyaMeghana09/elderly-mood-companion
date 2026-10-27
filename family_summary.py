@@ -60,4 +60,37 @@ def generate_family_summary(client, memories):
     if not content:
         return "Family summary could not be generated right now. Please try again."
 
-    return content.strip()
+    
+    summary = content.strip()
+
+    serious_terms = (
+        "fall with new confusion",
+        "fell and seems unusually confused",
+        "fall and appears unusually confused",
+        "unresponsive",
+        "difficulty breathing",
+        "trouble breathing",
+    )
+
+    history = timeline_text.lower()
+
+    if any(term in history for term in serious_terms):
+        summary = (
+            "- A potentially serious event was recorded. "
+            "Seek urgent medical assessment; do not treat this "
+            "as routine monitoring.\n"
+            + "\n".join(
+                line for line in summary.splitlines()
+                if not any(
+                    phrase in line.lower()
+                    for phrase in (
+                        "continue safety monitoring",
+                        "just monitor",
+                        "routine monitoring",
+                    )
+                )
+            )
+        )
+
+    return summary
+
