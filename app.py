@@ -265,6 +265,7 @@ if st.button("Analyze with AI"):
                 memory_context
             )
             st.session_state.analysis_result = result
+            st.session_state.agent_action = agent_action
             
             if agent_action == "flag_human_attention":
                 result["follow_up"] = (
