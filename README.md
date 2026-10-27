@@ -142,6 +142,12 @@ Nine Yes/No questions generate visual rings that summarize self-reported daily h
 
 ![Emergency Safety Response](careflow-safety-response.png)
 
+### 6. Supabase Care Records
+
+CareFlow AI stores caregiver observations, follow-up tasks, and human-attention alerts in Supabase.
+
+![Supabase care records](careflow-database.png)
+
 ### 🏆 Hackathon
 
 Built for the Nebius × NVIDIA Global AI Hackathon, using NVIDIA Nemotron through Nebius Token Factory.
