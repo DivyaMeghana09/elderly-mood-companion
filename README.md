@@ -73,13 +73,16 @@ Senior Wellness Interface
 ### 🛠️ Technology Stack
 
 - Python — application logic and tools
-- Streamlit — web interface
+- Streamlit — interactive web interface
 - Streamlit Community Cloud — deployment
 - NVIDIA Nemotron 3 Super — AI analysis and agent decisions
 - Nebius Token Factory — model inference API
 - Tavily — external web search
+- Supabase — PostgreSQL storage for observations, follow-up tasks, and human-attention alerts
+- Supabase — PostgreSQL storage for observations, follow-up tasks, and human-attention alerts
+- JSON files — local care-history storage and fallback workflows
 - Matplotlib — wellness ring visualizations
-- JSON files — prototype storage for care timeline, follow-up tasks, and human-attention alerts
+
 
 ### 🌐 Live Demo
 
@@ -106,9 +109,9 @@ streamlit run app.py
 ```
 ### 🔐 Safety and Privacy
 
-CareFlow AI is designed to support caregiver coordination, not replace professional care. It does not diagnose medical conditions or prescribe treatment. Potentially serious situations should receive appropriate human and professional attention.
+CareFlow AI supports caregiver coordination and does not replace professional care, diagnose medical conditions, or prescribe treatment. Potentially serious situations require appropriate human and professional attention.
 
-Do not enter unnecessary sensitive personal or medical information into a demo. The current prototype uses local JSON-based storage for care records.
+**Storage and privacy:** The prototype writes observations, tasks, and human-attention alerts to Supabase while retaining local JSON files for existing care-history and fallback workflows. It has not been validated for production clinical use. Avoid entering unnecessary sensitive personal or medical information, and do not use the demo as the sole repository for real care records.
 
 ### 📸 Screenshots
 
