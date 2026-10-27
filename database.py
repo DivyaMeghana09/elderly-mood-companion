@@ -24,7 +24,7 @@ def test_database_write_read():
         client = get_supabase_client()
         sample = {
             "record_type": "observation",
-            "content": {"observation": "Sample test record - safe to delete"},
+            "content": {"observation": "Temporary test record"},
         }
         inserted = client.table("care_records").insert(sample).execute()
         record_id = inserted.data[0]["id"]
@@ -38,30 +38,28 @@ def test_database_write_read():
         )
 
         client.table("care_records").delete().eq("id", record_id).execute()
-
-        if fetched.data:
-            return True, "Database write/read/delete test successful."
-        return False, "Record was inserted but could not be retrieved."
+        return bool(fetched.data), "Database write/read/delete test completed."
     except Exception as exc:
         return False, f"Database test failed: {exc}"
 
- 
+
 def save_observation_to_db(observation, mood=""):
-    client = get_supabase_client()
     record = {
         "record_type": "observation",
-        "content": {
-            "observation": observation,
-            "mood": mood,
-        },
+        "content": {"observation": observation, "mood": mood},
     }
-    return client.table("care_records").insert(record).execute()
+    return (
+        get_supabase_client()
+        .table("care_records")
+        .insert(record)
+        .execute()
+    )
 
 
 def get_observations_from_db(limit=50):
-    client = get_supabase_client()
     response = (
-        client.table("care_records")
+        get_supabase_client()
+        .table("care_records")
         .select("id, content, created_at")
         .eq("record_type", "observation")
         .order("created_at", desc=True)
@@ -69,4 +67,3 @@ def get_observations_from_db(limit=50):
         .execute()
     )
     return response.data
-
