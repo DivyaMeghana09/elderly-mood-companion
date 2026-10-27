@@ -573,36 +573,3 @@ if mood:
 
 st.caption("Made with love for seniors 💕")
 
-with st.sidebar.expander("Database connection test"):
-    if st.button("Test Supabase connection"):
-        success, message = test_database_connection()
-        if success:
-            st.success(message)
-        else:
-            st.error(message)
-
-with st.sidebar.expander("Database write/read test"):
-    if st.button("Run database test"):
-        success, message = database.test_database_write_read()
-        if success:
-            st.success(message)
-        else:
-            st.error(message)
-
-
-with st.sidebar.expander("Supabase observation test"):
-    if st.button("Test observation storage"):
-        try:
-            save_observation_to_db(
-                "Temporary CareFlow test record",
-                "neutral"
-            )
-            records = get_observations_from_db(limit=1)
-            st.success(
-                f"Supabase observation test passed. "
-                f"Records retrieved: {len(records)}"
-            )
-        except Exception as exc:
-            st.error(f"Observation test failed: {exc}")
-
-
