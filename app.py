@@ -308,6 +308,12 @@ if st.button("Analyze with AI"):
             if agent_action == "create_task":
                 task = create_task(result["follow_up"])
                 st.session_state.follow_up_task = task
+
+                try:
+                    save_task_to_db(task)
+                    st.session_state.task_db_saved = True
+                except Exception:
+                    st.session_state.task_db_saved = False
             else:
                 st.session_state.follow_up_task = None
 
@@ -315,6 +321,13 @@ if st.button("Analyze with AI"):
             if agent_action == "flag_human_attention":
                 alert = flag_human_attention(result["observation"])
                 st.session_state.human_attention_alert = alert
+                
+                try:
+                    save_alert_to_db(alert)
+                    st.session_state.alert_db_saved = True
+                except Exception:
+                    st.session_state.alert_db_saved = False
+
                 st.error(
                     "🚨 A fall with new confusion may be a medical emergency. "
                     "Contact local emergency services now. Avoid moving the person "
