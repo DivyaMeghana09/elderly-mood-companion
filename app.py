@@ -563,3 +563,20 @@ with st.sidebar.expander("Database write/read test"):
         else:
             st.error(message)
 
+
+with st.sidebar.expander("Supabase observation test"):
+    if st.button("Test observation storage"):
+        try:
+            save_observation_to_db(
+                "Temporary CareFlow test record",
+                "neutral"
+            )
+            records = get_observations_from_db(limit=1)
+            st.success(
+                f"Supabase observation test passed. "
+                f"Records retrieved: {len(records)}"
+            )
+        except Exception as exc:
+            st.error(f"Observation test failed: {exc}")
+
+
