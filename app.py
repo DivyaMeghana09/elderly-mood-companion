@@ -16,6 +16,7 @@ from tavily import TavilyClient
 from database import test_database_connection
 import database
 from database import save_observation_to_db, get_observations_from_db
+from database import save_task_to_db, save_alert_to_db
 
 st.set_page_config(
     page_title="CareFlow AI — Elder Care Companion",
