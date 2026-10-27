@@ -33,6 +33,14 @@ def generate_family_summary(client, memories):
                     "Each bullet should be no more than 20 words. "
                     "Prioritize the most recent observations and follow-up needs. "
                     "Do not include unnecessary historical details."
+                    "If observations mention a fall with new or sudden confusion, "
+                    "unresponsiveness, difficulty breathing, or another potentially "
+                    "serious event, clearly state that urgent human attention is needed. "
+                    "Never describe such an event as merely something to monitor. "
+                    "A later positive mood or normal activity does not cancel out an "
+                    "earlier serious event. "
+                    "Keep the summary factual and do not invent events or diagnoses. "
+                    "Remind readers that the summary does not replace emergency medical assessment."
                 )
             },
             {
