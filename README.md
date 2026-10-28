@@ -79,7 +79,6 @@ Senior Wellness Interface
 - Nebius Token Factory — model inference API
 - Tavily — external web search
 - Supabase — PostgreSQL storage for observations, follow-up tasks, and human-attention alerts
-- Supabase — PostgreSQL storage for observations, follow-up tasks, and human-attention alerts
 - JSON files — local care-history storage and fallback workflows
 - Matplotlib — wellness ring visualizations
 
